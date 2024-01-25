@@ -1,0 +1,62 @@
+package service.impl;
+
+import repository.foodtruck.Store;
+import request.NearestRequest;
+import service.FoodtruckService;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @className: FoodtruckServiceImpl
+ * @description:，
+ * @date: 2024/1/25
+ **/
+public class FoodtruckServiceImpl implements FoodtruckService {
+    private static double calculateDistance(Store store, BigDecimal x, BigDecimal y) {
+        return Math.sqrt((store.getLatitude().subtract(y)).multiply(store.getLatitude().subtract(y))
+                .add(store.getLongitude().subtract(x)).multiply(store.getLongitude().subtract(x)).doubleValue());
+    }
+
+    @Override
+    public Store getNearestFoodStore(NearestRequest nearestRequest) {
+        Store store = null;
+        List<Store> stores = getAllStores();
+        double minDistance = Double.POSITIVE_INFINITY;
+        for (Store tempStore : stores) {
+            double distance = calculateDistance(tempStore, nearestRequest.getCoordinateLong(), nearestRequest.getCoordinateLan());
+            if (distance < minDistance) {
+                store = tempStore;
+                minDistance = distance;
+            }
+        }
+
+        return store;
+    }
+
+    //mock the incoming result from db
+    private List<Store> getAllStores() {
+        List<Store> storeList = new ArrayList<>();
+        Store store1 = new Store();
+        store1.setAddress("2301 MISSION ST");
+        store1.setApplicant("Leo's Hot Dogs");
+        store1.setLongitude(new BigDecimal(-122.4188065));
+        store1.setLatitude(new BigDecimal(37.76008693));
+        Store store2 = new Store();
+        store2.setAddress("San Francisco Taco Truck");
+        store2.setApplicant("345 WILLIAMS AVE");
+        store2.setLongitude(new BigDecimal(-122.3992471));
+        store2.setLatitude(new BigDecimal(37.72980548));
+        Store store3 = new Store();
+        store3.setAddress("Ziaurehman Amini");
+        store3.setApplicant("5 THE EMBARCADERO");
+        store3.setLongitude(new BigDecimal(-122.3958111));
+        store3.setLatitude(new BigDecimal(37.794331));
+        //omitted other attributes
+        storeList.add(store1);
+        storeList.add(store2);
+        storeList.add(store3);
+        return storeList;
+    }
+}
