@@ -1,1 +1,25 @@
+package controller;
+
+import common.Result;
+import repository.foodtruck.Store;
+import request.NearestRequest;
+import service.FoodtruckService;
+import service.impl.FoodtruckServiceImpl;
+
+/**
+ * @className: APIController
+ * @description: TODO 类描述
+ * @date: 2024/1/24
+ **/
+public class APIController {
+
+
+    public Result<Store> findNearestStore(NearestRequest nearestRequest) {
+    // need to  check the validation of the input
+        FoodtruckService foodtruckService = new FoodtruckServiceImpl();
+        Store store = foodtruckService.getNearestFoodStore(nearestRequest);
+        return Result.normal(store);
+    }
+
+}
 
