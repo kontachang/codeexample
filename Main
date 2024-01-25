@@ -1,0 +1,54 @@
+import common.Result;
+import controller.APIController;
+import repository.foodtruck.Store;
+import request.NearestRequest;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+/**
+ * @className: Main
+ * @description:
+ * @date: 2024/1/24
+ **/
+public class Main {
+
+
+    public static void  main(String[] args) throws IOException {
+        System.out.println("Enter the choice you want to make:");
+        System.out.println("1.choose the nearest store to me");
+        System.out.println("2.help me find the most popular store for some specified category");
+        Scanner sc = new Scanner(System.in);
+       String input= sc.nextLine();
+        System.out.println("You entered " + input);
+        int NEAREST_EXAMPLE=1;
+        int TBD=2;
+        //the magic number is just an example
+        if(!isNumeric(input)||(Integer.valueOf(input)!=TBD&&Integer.valueOf(input)!=NEAREST_EXAMPLE)){
+            System.out.println("You entered  wrong character " + input);
+            System.exit(0);
+        }
+        if(Integer.valueOf(input)==NEAREST_EXAMPLE){
+            APIController apiController =new APIController();
+            //mock nearest request
+            NearestRequest nearestRequest=  new NearestRequest();
+            nearestRequest.setCoordinateLan(new BigDecimal(37.72980552));
+            nearestRequest.setCoordinateLong(new BigDecimal(-122.3992471));
+            Result<Store> store=apiController.findNearestStore(nearestRequest);
+            System.out.println("the nearest store is "+store.getModel().getApplicant()+" located in"+store.getModel().getAddress());
+        }else{
+            System.out.println("this function will be release  a few weeks later,thank you in advance");
+
+        }
+
+        System.exit(0);
+
+    }
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        return pattern.matcher(str).matches();
+    }
+
+}
